@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Criando arquivo EAR " basedir="." default="init">
+    <!-- definindo as propriedades do arquivo JAR -->
+    <property name="src" value="src/main/java" />
+    <property name="bin" value="bin" />
+    <property name="libs" value="libs" />
+    <property name="dist" value="dist" />
+    <property name="jar.file" value="${dist}/ejb-1.jar" />
+
+    <!-- definindo onde estao os JARs dos sistema para a compilacao -->
+    <path id="classpath.base">
+        <fileset dir="${libs}">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+    
+    <target name="init">
+        <echo>Iniciando build do arquivo JAR com Ant</echo>
+    </target>
+    <target name="clean" depends="init">
+        <delete dir="${bin}"></delete>
+    </target>
+    <target name="prepare" depends="init">
+        <mkdir dir="${bin}" />
+    </target>
+    <!-- compilando os .java do diretorio src -->
+    <target name="compile" depends="init, clean, prepare">
+        <echo>Compilando as classes do diretorio src</echo>
+        <javac srcdir="${src}" destdir="${bin}" verbose="false" includeantruntime="false">
+            <classpath refid="classpath.base" />
+        </javac>
+    </target>
+
+    <!--cria o JAR  -->
+    <target name="create-jar" depends="compile">
+        <echo>Gerando arquivo JAR</echo>
+        <jar jarfile="${jar.file}">
+            <fileset dir="${bin}">
+            </fileset>
+        </jar>
+    </target>
+
+</project>

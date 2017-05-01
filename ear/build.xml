@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Criando arquivo EAR" basedir="." default="init">
+
+    <!-- definicao das propriedades dos arquivos -->
+    <property name="dist" value="dist" />
+
+    <property name="eap.home" value="/Users/humbertodias/Downloads/eDreams/dev/dev/servers/jboss-eap-6.4" />
+    <property name="deploy.home" value="${eap.home}/standalone/deployments" />
+
+    <!-- definindo as propriedades do ear-->
+    <property name="application.ear" value="${dist}/exemplo.ear" />
+    <property name="application.xml" value="META-INF/application.xml" />
+
+    <target name="init">
+        <echo>Iniciando build do Projeto EAR com Ant</echo>
+    </target>
+
+    <target name="prepare" depends="init">
+        <mkdir dir="${dist}" />
+    </target>    
+
+    <target name="clean" depends="init">
+        <delete file="${dist}/exemplo.jar"></delete>
+        <delete file="${dist}/exemplo.war"></delete>
+        <delete dir="${application.ear}"></delete>
+    </target>
+
+    <target name="copy-jar-war">
+        <ant antfile="../jar/build.xml" target="create-jar" inheritall="false"/>
+        <ant antfile="../war/build.xml" target="create-war" inheritall="false"/>
+
+		<copy file="../jar/dist/exemplo.jar" todir="${dist}"/>
+		<copy file="../war/dist/exemplo.war" todir="${dist}"/>
+    </target>
+
+    <!-- cria o arquivo EAR -->
+    <target name="create-ear" depends="copy-jar-war">
+        <echo>Gerando arquivo EAR em ${application.ear}</echo>
+	  	<ear destfile="${application.ear}" appxml="${application.xml}">
+	      <fileset dir="${dist}" includes="*.ejb3, *.jar, *.war, *.par"/>
+	    </ear>
+
+		<delete>
+	      <fileset dir="${dist}" includes="*.ejb3, *.jar, *.war, *.par"/>
+		</delete>
+
+      </target>
+
+    <!-- faz o deploy no JBoss -->
+    <target name="deploy-ear" depends="create-ear, undeploy-ear">
+        <echo>Deploy aplicacao no JBOSS</echo>
+        <copy file="${application.ear}" todir="${deploy.home}" />
+    </target>
+
+    <!-- undeploy da aplicacao -->
+    <target name="undeploy-ear">
+        <echo>UnDeploy aplicacao no JBOSS</echo>
+        <delete file="${deploy.home}/exemplo.ear" />
+    </target>
+
+</project>

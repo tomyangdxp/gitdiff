@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Criacao do arquivo WAR" basedir=".">
+ 
+    <!-- definicao das propriedades dos arquivos -->
+    <property name="src" value="src/main/java"/>
+    <property name="bin" value="bin" />
+    <property name="libs" value="libs" />
+    <property name="warfile.name" value="dist/war-1.war"/>
+    <property name="webappdir" value="src/main/webapp" />
+    <property name="webxml.file" value="${webappdir}/WEB-INF/web.xml"/>
+    <property name="webinf.dir" value="${webappdir}/WEB-INF" />
+    <property name="eap.home" value="/Users/humbertodias/Downloads/eDreams/dev/dev/servers/jboss-eap-6.4" />
+    <property name="deploy.home" value="${eap.home}/standalone/deployments"/>
+     
+    <!-- definindo onde estao os JARs dos sistema -->
+    <path id="classpath.base">
+        <fileset dir="${libs}">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+ 
+    <!-- libs -->
+    <path id="libs">
+        <fileset dir="../ejb-1/libs"/>
+        <fileset dir="../ejb-1/dist"/>
+        <fileset dir="${webinf.dir}/lib"/>
+        <fileset dir="libs"/>
+    </path>
+
+    <target name="init">
+        <echo>Iniciando build web do projeto</echo>
+    </target>
+ 
+    <target name="clean" depends="init">
+        <delete dir="${bin}"/>
+
+        <delete failonerror="false">
+            <fileset dir="libs"/>
+        </delete>
+
+        <delete file="${warfile.name}"/>
+
+    </target>
+ 
+    <target name="prepare" depends="init">
+        <mkdir dir="${bin}" />
+
+
+        <copy todir="libs">
+            <resources refid="libs"/>
+        </copy>
+
+    </target>
+ 
+    <target name="compile" depends="init, clean, prepare">
+        <echo>Compilando classes</echo>
+        <javac srcdir="${src}" destdir="${bin}" verbose="false" includeantruntime="false">
+            <classpath refid="classpath.base" />
+        </javac>
+    </target>
+ 
+    <!-- cria um arquivo war -->
+    <target name="create-war" depends="compile">
+        <echo>Gerando arquivo WAR</echo>
+ 
+        <war warfile="${warfile.name}" webxml="${webxml.file}">
+            <fileset dir="${webappdir}" >
+                <include name="*.html" />
+                <include name="*.jsp" />
+            </fileset>
+ 
+            <classes dir="${bin}" />
+            <lib dir="${libs}">
+                <exclude name="alcumula_jar_desnecessario_ao_modulo_web.jar" />
+            </lib>
+
+            <webinf dir="${webinf.dir}">
+                <include name="${webxml.file}" />
+            </webinf>
+ 
+        </war>
+ 
+    </target>
+ 
+    <!-- faz o deploy no JBoss -->
+    <target name="deploy-war" depends="create-war">
+        <echo>Deploy do JBOSS</echo>
+        <copy file="${warfile.name}" todir="${deploy.home}" />
+    </target>
+ 
+</project>

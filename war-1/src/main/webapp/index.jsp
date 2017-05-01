@@ -1,0 +1,1 @@
+war-1 using <%=com.EJB1.name()%>
