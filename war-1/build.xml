@@ -2,6 +2,7 @@
 <project name="Criacao do arquivo WAR" basedir=".">
  
     <!-- definicao das propriedades dos arquivos -->
+	<property name="absolute.path" location="."/>
     <property name="src" value="src/main/java"/>
     <property name="bin" value="bin" />
     <property name="libs" value="libs" />
@@ -43,8 +44,8 @@
     </target>
  
     <target name="prepare" depends="init">
+    	<echo>base dir ${absolute.path}</echo>
         <mkdir dir="${bin}" />
-
 
         <copy todir="libs">
             <resources refid="libs"/>
@@ -53,7 +54,7 @@
     </target>
  
     <target name="compile" depends="init, clean, prepare">
-        <echo>Compilando classes</echo>
+        <echo>Compilando classes into ${absolute.path}</echo>
         <javac srcdir="${src}" destdir="${bin}" verbose="false" includeantruntime="false">
             <classpath refid="classpath.base" />
         </javac>
@@ -61,7 +62,7 @@
  
     <!-- cria um arquivo war -->
     <target name="create-war" depends="compile">
-        <echo>Gerando arquivo WAR</echo>
+        <echo>Gerando arquivo WAR ${webxml.file}</echo>
  
         <war warfile="${warfile.name}" webxml="${webxml.file}">
             <fileset dir="${webappdir}" >

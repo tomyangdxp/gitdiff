@@ -26,11 +26,10 @@
     </target>
 
     <target name="copy-jar-war">
-        <ant antfile="../jar/build.xml" target="create-jar" inheritall="false"/>
-        <ant antfile="../war/build.xml" target="create-war" inheritall="false"/>
-
-		<copy file="../jar/dist/exemplo.jar" todir="${dist}"/>
-		<copy file="../war/dist/exemplo.war" todir="${dist}"/>
+		<copy file="../ejb-1/dist/ejb-1.jar" todir="${dist}"/>
+		<copy file="../war-1/dist/war-1.war" todir="${dist}"/>
+    	<copy file="../ejb-2/dist/ejb-2.jar" todir="${dist}"/>
+        <copy file="../war-2/dist/war-2.war" todir="${dist}"/>
     </target>
 
     <!-- cria o arquivo EAR -->

@@ -9,5 +9,12 @@
         <ant antfile="war-2/build.xml" target="clean"/>
         <ant antfile="ear/build.xml" target="clean"/>
     </target>
+	
+	<target name="create-jar">
+		<ant antfile="ejb-1/build.xml" target="create-jar"/>
+		<ant antfile="ejb-2/build.xml" target="create-jar"/>
+		<ant antfile="war-1/build.xml" target="create-war"/>
+	    	    
+	</target>
 
 </project>
