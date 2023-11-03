@@ -36,7 +36,10 @@
     <target name="create-ear" depends="copy-jar-war">
         <echo>Gerando arquivo EAR em ${application.ear}</echo>
 	  	<ear destfile="${application.ear}" appxml="${application.xml}">
-	      <fileset dir="${dist}" includes="*.ejb3, *.jar, *.war, *.par"/>
+	      <fileset file="../ejb-1/dist/ejb-1.jar"/>
+	      <fileset file="../war-1/dist/war-1.war"/>
+	      <fileset file="../ejb-2/dist/ejb-2.jar"/>
+	  	  <fileset file="../war-2/dist/war-2.war"/>
 	    </ear>
 
 		<delete>
