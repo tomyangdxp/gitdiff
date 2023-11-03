@@ -34,6 +34,11 @@ eval "git $cmd $args" | {
           /cygdrive/c/Fujitsu/BDM/Projects/CommonCode/apache-ant-1.9.16/bin/ant create-war;
         elif echo "$folder" | grep 'ejb'; then
           /cygdrive/c/Fujitsu/BDM/Projects/CommonCode/apache-ant-1.9.16/bin/ant create-jar;
+          cd ..
+          folder2="${folder/ejb/war}"
+          cd $folder2
+          echo "Rebuild $folder2";
+          /cygdrive/c/Fujitsu/BDM/Projects/CommonCode/apache-ant-1.9.16/bin/ant create-war;
         fi
         cd ..;
       fi
