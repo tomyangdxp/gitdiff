@@ -24,10 +24,10 @@ eval "git $cmd $args" | {
     esac
     total=$(( $total + $bytes ))
     printf '%d\t%s\n' $bytes "$P"
-    if [[ "$depth" -ne "0" ]]; then
+    if [[ "$bytes" -ne "0" ]]; then
       echo "File $P is changed"
-      if echo "$file" | grep 'src'; then
-        folder="${file:0:5}";
+      if echo "$P" | grep '/src'; then
+        folder="${P:0:5}";
         echo "Rebuild $folder";
         cd $folder;
         if echo "$folder" | grep 'war'; then
